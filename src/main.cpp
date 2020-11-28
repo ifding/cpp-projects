@@ -1,12 +1,13 @@
 #include "../include/test.h"
 
-using namespace tinySTL;
 
 // main function, testing components
 int main()
 {
-    test::test_complex();
-    test::test_string();
+    testUtility();
+    testMemory();
+    std::cout << test_pass << "/" << test_count 
+        << " (passed " << test_pass * 100.0 / test_count << "%)" << std::endl;
 
     return 0;
 }

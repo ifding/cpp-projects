@@ -1,6 +1,6 @@
 # tinySTL
 
-The tinySTL is a tiny STL writen by C++2a and generic programming, providing six basic components: containers,  iterators, adapters, algorithms, allocators and functions. It also contains three smart pointers(shared_ptr, unique_ptr, weak_ptr) and test codes.
+The tinySTL is a tiny STL writen by C++11/14 and generic programming, providing six basic components: containers,  iterators, adapters, algorithms, allocators and functions. It also contains three smart pointers(shared_ptr, unique_ptr, weak_ptr) and test codes.
 
 ## Test
 
@@ -63,7 +63,7 @@ tinySTL shows some progress in efficiency compared to PJ STL and SGI STL in some
 
 
 ## Reference
-
+- <https://github.com/AnthonyCalandra/modern-cpp-features>
 - <https://github.com/cjc12/ezSTL>
 - <https://github.com/Alinshans/MyTinySTL>
 - <https://github.com/FrezCirno/TinySTL>
