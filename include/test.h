@@ -3,7 +3,11 @@
 
 #include "utility.h"
 #include "memory.h"
+#include "vector.h"
+#include "list.h"
 #include <iostream>
+#include <random>
+#include <ctime>
 
 static int main_ret = 0;
 static int test_count = 0;
@@ -95,6 +99,70 @@ void testMemory() {
     auto sp2 = wp2.lock();
     UNIT_TEST(42, *sp2);
     UNIT_TEST(3, sp2.use_count());
+}
+
+void testVector() {
+    srand((unsigned int)time(NULL));
+    tinySTL::vector<int> v;
+    for(int i = 0; i < 10; ++i) v.push_back(rand()%10);
+    UNIT_TEST(true, v[v.size()-1] == v.back());
+    UNIT_TEST(16, v.capacity());
+    v.pop_back();
+    v.erase(v.begin()+3);
+    //print_elements(v);
+    for(int i = 0; i < 10; ++i) {
+        int randn = rand() % 8;
+        auto ret_itr = v.insert(v.begin() + randn, -randn);
+    }
+    tinySTL::vector<int> w(v);
+    UNIT_TEST(true, w[0] == v[0]);
+    tinySTL::vector<int> u(tinySTL::move(v));
+    UNIT_TEST(true, v.empty());
+    tinySTL::vector<int> x;
+    x = u;
+    tinySTL::swap(x, v);
+    UNIT_TEST(true, x.empty());
+    tinySTL::vector<int> y;
+    y = tinySTL::move(w);
+    tinySTL::swap(v[0], v[3]);
+    UNIT_TEST(true, y.front() == v[3]);
+    y.resize(16);
+    UNIT_TEST(16, y.size());
+    y.clear();
+    UNIT_TEST(true, y.empty()); 
+}
+
+void testList() {
+    srand((unsigned int)time(NULL));
+    tinySTL::list<int> l;
+    for(int i = 0; i < 5; ++i) l.push_back(rand()%10);
+    UNIT_TEST(5, l.size());
+    for(int i = 0; i < 5; ++i) l.push_front(-rand()%10);
+    //print_elements(l);
+    for(int i = 0; i < 2; ++i) {
+        l.pop_back();
+        l.pop_front();
+    }
+    //print_elements(l);
+    for(int i = 0; i < 4; ++i) {
+        int randn = rand() % 5;
+        auto ret_itr = l.insert(l.begin() + randn, -randn);
+    }
+    for(int i = 0; i < 4; ++i) {
+        int randn = rand() % 5;
+        auto ret_itr = l.erase(l.begin() + randn);
+    }
+    UNIT_TEST(6, l.size());
+    tinySTL::list<int>w(l);
+    tinySTL::list<int>u(tinySTL::move(w));
+    UNIT_TEST(true, w.empty());
+    w = u;
+    tinySTL::list<int> x;
+    x = tinySTL::move(u);
+    UNIT_TEST(6, x.size());
+    UNIT_TEST(0, u.size());
+    x.clear();
+    UNIT_TEST(0, x.size());
 }
 
 
