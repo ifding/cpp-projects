@@ -5,6 +5,12 @@
 #include "memory.h"
 #include "vector.h"
 #include "list.h"
+#include "rbtree.h"
+#include "set.h"
+#include "map.h"
+#include "unordered_map.h"
+#include "stack.h"
+#include "queue.h"
 #include <iostream>
 #include <random>
 #include <ctime>
@@ -38,12 +44,11 @@ void print_elements(const T& container) {
 template<typename T>
 void print_element_with_pair(const T& container) {
     for(const auto& pair : container)
-        std::cout << "[" << pair.first 
-            << ", " << pair.second << "]" << std::endl;
+        std::cout << "(" << pair.first << ", " << pair.second << ")" << " ";
     std::cout << std::endl;
 }
 
-void testUtility() {
+void test_utility() {
     int i = 31, j = 42;
     tinySTL::swap(i, j);
     UNIT_TEST(31, j);
@@ -74,7 +79,7 @@ void testUtility() {
     UNIT_TEST(true, cp != p);
 }
 
-void testMemory() {
+void test_memory() {
     tinySTL::shared_ptr<int> sp0;
     UNIT_TEST(false, static_cast<bool>(sp0));
     tinySTL::shared_ptr<int> sp1(new int(42));
@@ -101,7 +106,7 @@ void testMemory() {
     UNIT_TEST(3, sp2.use_count());
 }
 
-void testVector() {
+void test_vector() {
     srand((unsigned int)time(NULL));
     tinySTL::vector<int> v;
     for(int i = 0; i < 10; ++i) v.push_back(rand()%10);
@@ -132,7 +137,7 @@ void testVector() {
     UNIT_TEST(true, y.empty()); 
 }
 
-void testList() {
+void test_list() {
     srand((unsigned int)time(NULL));
     tinySTL::list<int> l;
     for(int i = 0; i < 5; ++i) l.push_back(rand()%10);
@@ -163,6 +168,145 @@ void testList() {
     UNIT_TEST(0, u.size());
     x.clear();
     UNIT_TEST(0, x.size());
+}
+
+void test_rbtree() {
+    srand((unsigned int)time(NULL));
+    tinySTL::rbtree<int> rbt;
+    for (int i = 0; i < 10; ++i) {
+        rbt.insert(rand() % 100);
+    }
+    for (int i = 0; i < 100; ++i) {
+        int number = rand() % 100;
+        auto itr = rbt.find(number);
+        if (itr != rbt.end()) {
+            //std::cout << "to remove : " << number << std::endl;
+            rbt.erase(itr);
+            //print_elements(rbt);
+        }
+    }
+    UNIT_TEST(true, rbt.is_rbtree());
+    rbt.clear();
+    UNIT_TEST(true, rbt.empty());
+}
+
+void test_set() {
+    srand((unsigned int)time(NULL));
+    tinySTL::set<int> s;
+    for (int i = 0; i < 10; ++i) {
+        int number = rand() % 100;
+        //std::cout << "to insert " << number << " ; ";
+        auto itr = s.find(number);
+        //if (itr == s.end()) std::cout << "not exists" << std::endl;
+        //else std::cout << "already exist : " << *itr << " (obtained by find iterator)" << std::endl;
+        s.insert(number);
+    }
+    //print_elements(s);
+    for (int i = 0; i < 100; ++i) {
+        int number = rand() % 100;
+        auto itr = s.find(number);
+        if (itr != s.end()) {
+            //std::cout << "to remove : " << number << std::endl;
+            s.erase(itr);
+            //print_elements(s);
+        }
+    }
+    s.clear();
+    UNIT_TEST(true, s.empty());
+}
+
+void test_map() {
+    srand((unsigned int)time(NULL));
+    tinySTL::map<int, int> mp;
+    for (int i = 0; i < 10; ++i) {
+        int number1 = rand() % 100;
+        int number2 = rand() % 100;
+        tinySTL::pair<int, int> p = tinySTL::make_pair(number1, number2);
+        auto itr = mp.find(p.first);
+        //if (itr == mp.end()) std::cout << "not exists" << std::endl;
+        //else std::cout << "already exist : " << p.first << ":" << p.second << " (obtained by find iterator)" << std::endl;
+        mp.insert(p);
+    }
+    for (int i = 0; i < 10; ++i) {
+        int number = rand() % 100;
+        auto itr = mp.find(number);
+        if (itr != mp.end()) {
+            //print_element_with_pair(mp);
+            //std::cout << "to remove key: " << number << std::endl;
+            mp.erase(itr);
+            //print_element_with_pair(mp);
+        }
+    }
+    mp.clear();
+    UNIT_TEST(true, mp.empty());
+}
+
+template<typename Key, typename Value>
+void print_unordered_map(tinySTL::unordered_map<Key, Value>& um) {
+    for(auto itr = um.begin(); itr != um.end(); ++itr) {
+        std::cout << itr.get_key() << ":" << *itr << " ";
+    }
+    std::cout << std::endl;
+}
+
+void test_unordered_map() {
+    const int max_iteration = 10;
+    srand((unsigned int)time(NULL));
+    tinySTL::unordered_map<int, int> um;
+    for(int i = 0; i < max_iteration; ++i){
+        tinySTL::pair<int, int> p(rand() % max_iteration, rand() % max_iteration);
+        um.insert(p);
+        //std::cout << "insert key-value pair   " << p.first << ":" << p.second << std::endl;
+        //print_unordered_map(um);
+    }
+    for (int i = 0; i < max_iteration; ++i) {
+        int key = rand() % max_iteration;
+        auto itr = um.find(key);
+        if (itr != um.end()) um.erase(itr);
+        //std::cout << "deleting key   " << key << std::endl;
+        //print_unordered_map(um);
+    }
+    tinySTL::unordered_map<int, int> um1(um);
+    tinySTL::unordered_map<int, int> um2(tinySTL::move(um1));
+    tinySTL::unordered_map<int, int> um3;
+    um3 = um;
+    tinySTL::unordered_map<int, int> um4;
+    um4 = tinySTL::move(um2);
+    //print_unordered_map(um3);
+    um.clear();
+    UNIT_TEST(true, um.empty());
+}
+
+void test_stack() {
+    srand((unsigned int)time(NULL));
+    tinySTL::stack<int> s;
+    for(int i = 0; i < 5; ++i) { 
+        s.push(rand() % 10); 
+    }
+    UNIT_TEST(5, s.size());
+    for(int i = 0; i < 5; ++i) { 
+        s.pop();
+        //if (!s.empty()) std::cout << "top: " << s.top() << std::endl; 
+    }
+    UNIT_TEST(true, s.empty());
+}
+
+void test_queue() {
+    srand((unsigned int)time(NULL));
+    tinySTL::queue<int> q;
+    for (int i = 0; i < 5; ++i) {
+        q.push(rand());
+    }
+    UNIT_TEST(5, q.size());
+    for (int i = 0; i < 5; ++i) {
+        q.pop();
+    }
+    UNIT_TEST(true, q.empty());
+
+    tinySTL::priority_queue<int> pq;
+    for (int i = 0; i < 10; ++i) { pq.push(rand() % 100); }
+    for (int i = 0; i < 10; ++i) { pq.pop(); } 
+    UNIT_TEST(true, pq.empty());
 }
 
 
