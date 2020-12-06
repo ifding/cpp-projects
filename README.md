@@ -32,7 +32,13 @@ Providing a simple allocator. Users can customize their own allocators.
 
 Using type_traits tricks
 
-### 5. containters
+### 5. functions
+
+Providing functions including less, greater, etc.
+
+Providing a universal hash function for unordered_map.
+
+### 6. containers
 
 **vector**: dynamic array
  
@@ -45,7 +51,7 @@ Using type_traits tricks
 **unordered_map**: hash table
 > begin(), end(), empty(), size(), push_back(), pop_back(), find(), insert(), erase(), clear(), copy constructor, move constructor, copy assignment operator, move assignment operator, destructor, etc
 
-### 6. adapters
+### 7. adapters
 
 **stack**: using list as base container
 
@@ -54,17 +60,11 @@ Using type_traits tricks
 **priority_queue**: using vector as base container
 > empty(), size(), push(), pop(), top(), front(), back()
 
-### 7. algorithms
+### 8. algorithms
 
 **sort**: using insertion sort/quick sort/heap sort
 
 **stable_sort**: stable version, using insertion sort/merge sort
-
-### 8. functions
-
-Providing functions including less, greater, etc.
-
-Providing a universal hash function for unordered_map.
 
 **efficiency**:
 tinySTL shows some progress in efficiency compared to PJ STL and SGI STL in some aspects. For example, tinySTL is slightly better than PJ STL in set/map inserting, finding, erasing and in sort function. It also excels SGI STL in  set/map inserting, finding, erasing.

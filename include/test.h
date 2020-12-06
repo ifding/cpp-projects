@@ -11,9 +11,11 @@
 #include "unordered_map.h"
 #include "stack.h"
 #include "queue.h"
+#include "algorithm.h"
 #include <iostream>
 #include <random>
 #include <ctime>
+#include <algorithm>
 
 static int main_ret = 0;
 static int test_count = 0;
@@ -309,5 +311,27 @@ void test_queue() {
     UNIT_TEST(true, pq.empty());
 }
 
+void test_algorithm() {
+    const int max_iteration = 10;
+    std::default_random_engine e((unsigned)time(0));
+    std::uniform_int_distribution<unsigned> u(0, 20);
+    tinySTL::vector<unsigned> v1;
+    for (int i = 0; i < max_iteration; ++i) {
+        v1.push_back(u(e));
+    }
+    //print_elements(v1);
+    tinySTL::sort(v1.begin(), v1.end());
+    UNIT_TEST(true, std::is_sorted(v1.begin(), v1.end()));
+    //print_elements(v1);
+
+    tinySTL::vector<tinySTL::pair<unsigned, unsigned>> v2;
+    for (int i = 0; i < max_iteration; ++i) {
+        v2.push_back(tinySTL::make_pair(u(e), u(e)));
+    }
+    //print_element_with_pair(v2);
+    tinySTL::merge_sort(v2.begin(), v2.end(), tinySTL::less<tinySTL::pair<unsigned, unsigned>>());
+    UNIT_TEST(true, std::is_sorted(v2.begin(), v2.end())); 
+    //print_element_with_pair(v2);
+}
 
 #endif

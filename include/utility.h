@@ -89,7 +89,7 @@ namespace tinySTL
     }
     template<typename T1, typename T2>
     bool operator<(const pair<T1, T2>& lhs, const pair<T1, T2>& rhs) {
-        return lhs.first < rhs.first or (lhs.first == rhs.first and lhs.second == rhs.second);
+        return lhs.first < rhs.first or (lhs.first == rhs.first and lhs.second < rhs.second);
     }
     template<typename T1, typename T2>
     bool operator!=(const pair<T1, T2>& lhs, const pair<T1, T2>& rhs) {

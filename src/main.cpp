@@ -14,6 +14,7 @@ int main()
     test_unordered_map();
     test_stack();
     test_queue();
+    test_algorithm();
     std::cout << test_pass << "/" << test_count 
         << " (passed " << test_pass * 100.0 / test_count << "%)" << std::endl;
 
