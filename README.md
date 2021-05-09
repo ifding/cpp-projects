@@ -1,8 +1,8 @@
-# C++ projects
+# pkg
 
-The tiny C++11/14/17 projects collection, including tinySTL, json, RB_Tree, NoSQL, WebServer
+A personal Go codebase. 
 
 
-- [tinySTL](./tinySTL)
-- [json](./json)
-- [resource](./resource)
+## License
+
+MIT &copy; [ifding](https://github.com/ifding)
